@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using TokenDemo.Attributes;
 using TokenDemo.Services;
 using TokenFactory;
 using TokenFactory.JWT;
@@ -28,6 +29,7 @@ namespace TokenDemo
             config.MessageHandlers.Add(new ProcessTokenMessageHandler(tokenValidator, tokenFromHeader));
             config.MessageHandlers.Add(new ProcessTokenMessageHandler(tokenValidator, tokenFromQueryString));
 
+            config.Filters.Add(new MyAuthorize());
             // Web API routes
             config.MapHttpAttributeRoutes();
             config.Routes.MapHttpRoute(
@@ -35,6 +37,13 @@ namespace TokenDemo
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+        }
+    }
+    public class QQ : ITokenValidator
+    {
+        public ValidationResult ValidateTokenAndGetPrincipal(string token)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -15,10 +15,12 @@ namespace TokenFactory
     {
         private readonly ITokenValidator _validator;
         private readonly ProvideTokenDelegating _provideTokenDelegate;
-        public ProcessTokenMessageHandler(ITokenValidator validator, ProvideTokenDelegating provideDelegate)
+        private readonly Action<string> _errorProcess;
+        public ProcessTokenMessageHandler(ITokenValidator validator, ProvideTokenDelegating provideDelegate, Action<string> errorProcess = null)
         {
             _validator = validator;
             _provideTokenDelegate = provideDelegate;
+            _errorProcess = errorProcess;
         }
         public ProcessTokenMessageHandler(ITokenValidator validator, Func<HttpRequest, string> provideTokenFunc)
         {
@@ -34,6 +36,10 @@ namespace TokenFactory
                 if (result.IsValid)
                 {
                     HttpContext.Current.User = result.Principal;
+                }
+                else
+                {
+                    _errorProcess?.Invoke(result.ErrorMsg);
                 }
             }
             return base.SendAsync(request, cancellationToken);

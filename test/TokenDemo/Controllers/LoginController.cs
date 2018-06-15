@@ -31,7 +31,6 @@ namespace TokenDemo.Controllers
             return Ok(token);
         }
 
-        [MyAuthorize]
         public IHttpActionResult GET()
         {
             return Ok(new
