@@ -17,13 +17,8 @@ namespace ConsoleTest
             {
                 Audience = "Test",
                 Issuer = "Test",
-                Secret = "IIIIIIIIIIIIIIIIIIIIIIIIIIII"
-            });
-            ITokenValidator validator = new JWTTokenValidator(new JWTTokenValidateOption()
-            {
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                IssuerSigningKey = "IIIIIIIIIIIIIIIIIIIIIIIIIIII",
+                Secret = "IIIIIIIIIIIIIIIIIIIIIIIIIIII",
+                ExpireSeconds = 50
             });
             var token = manager.GenerateToken(new List<Claim>()
                   {
@@ -32,6 +27,17 @@ namespace ConsoleTest
                       new Claim("Birthday", "100/01/01"),
                   });
             Console.WriteLine(token);
+
+
+            ITokenValidator validator = new JWTTokenValidator(new JWTTokenValidateOption()
+            {
+                ValidAudience = "Test1",
+                ValidIssuer = "Test2",
+                ValidateAudience = true,
+                ValidateIssuer = false,
+                IssuerSigningKey = "IIIIIIIIIIIIIIIIIIIIIIIIIIII",
+            });
+            System.Threading.Thread.Sleep(6000);
             var result = validator.ValidateTokenAndGetPrincipal(token);
             Console.WriteLine("Name:" + result.Principal.FindFirst("Name").Value);
             Console.WriteLine("Age:" + result.Principal.FindFirst("Age").Value);

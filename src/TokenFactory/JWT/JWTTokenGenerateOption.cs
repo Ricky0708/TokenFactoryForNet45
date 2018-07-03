@@ -16,7 +16,7 @@ namespace TokenFactory.JWT
         public string Secret { get; set; }
 
         /// <summary>
-        /// expire second
+        /// expire second, default 1200
         /// </summary>
         public int ExpireSeconds { get; set; } = 1200;
 

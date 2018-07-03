@@ -39,6 +39,24 @@ namespace TokenFactory.JWT
                 errorMsg = "";
                 principal = tokenHandler.ValidateToken(funcToken, funcParameters, out SecurityToken securityToken);
             }
+            catch (SecurityTokenInvalidIssuerException ex)
+            {
+                isValidate = false;
+                errorMsg = ex.Message;
+                principal = null;
+            }
+            catch (SecurityTokenInvalidAudienceException ex)
+            {
+                isValidate = false;
+                errorMsg = ex.Message;
+                principal = null;
+            }
+            catch(SecurityTokenExpiredException ex)
+            {
+                isValidate = false;
+                errorMsg = ex.Message;
+                principal = null;
+            }
             catch (Exception ex)
             {
                 isValidate = false;
