@@ -13,7 +13,7 @@ namespace TokenFactory.JWT
         /// <summary>
         /// signature code
         /// </summary>
-        public string Secret { get; set; } = SecretKey.defalut;
+        public string Secret { get; set; }
 
         /// <summary>
         /// expire second

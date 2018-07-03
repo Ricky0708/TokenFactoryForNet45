@@ -12,9 +12,16 @@ namespace TokenFactory.JWT
     public class JWTTokenValidator : ITokenValidator
     {
         private JWTTokenValidateOption _parameters;
+        public JWTTokenValidator(string secret)
+        {
+            _parameters = new JWTTokenValidateOption()
+            {
+                 IssuerSigningKey = secret
+            };
+        }
         public JWTTokenValidator(JWTTokenValidateOption parameters)
         {
-            _parameters = parameters ?? new JWTTokenValidateOption();
+            _parameters = _parameters ?? throw new ArgumentException("parameters can't be null");
         }
         private Func<string, TokenValidationParameters, ValidationResult> func = (funcToken, funcParameters) =>
         {

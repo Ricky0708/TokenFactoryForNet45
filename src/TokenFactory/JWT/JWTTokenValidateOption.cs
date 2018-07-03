@@ -20,7 +20,7 @@ namespace TokenFactory.JWT
         /// <summary>
         /// 驗證用的 key
         /// </summary>
-        public string IssuerSigningKey { get; set; } = SecretKey.defalut;
+        public string IssuerSigningKey { get; set; }
         /// <summary>
         /// 是否驗證發行對像 (client target)
         /// </summary>

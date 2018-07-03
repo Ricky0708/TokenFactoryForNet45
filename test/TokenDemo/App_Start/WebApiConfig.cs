@@ -39,11 +39,4 @@ namespace TokenDemo
             );
         }
     }
-    public class QQ : ITokenValidator
-    {
-        public ValidationResult ValidateTokenAndGetPrincipal(string token)
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

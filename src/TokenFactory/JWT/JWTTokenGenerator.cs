@@ -12,9 +12,16 @@ namespace TokenFactory.JWT
     public class JWTTokenGenerator : ITokenGenerator
     {
         private JWTTokenGenerateOption _options;
+        public JWTTokenGenerator(string secret)
+        {
+            _options = new JWTTokenGenerateOption()
+            {
+                Secret = secret
+            };
+        }
         public JWTTokenGenerator(JWTTokenGenerateOption options)
         {
-            _options = options ?? new JWTTokenGenerateOption();
+            _options = options ?? throw new ArgumentException("options can't be null");
         }
         /// <summary>
         /// Create JWT token
