@@ -29,10 +29,10 @@ namespace TokenFactory.JWT
         /// 是否驗證發行者 (server)
         /// </summary>
         public bool ValidateIssuer { get; set; } = true;
-        /// <summary>
-        /// 是否驗證 key
-        /// </summary>
-        public bool ValidateIssuerSigningKey { get; set; } = true;
+        ///// <summary>
+        ///// 是否驗證 key
+        ///// </summary>
+        //public bool ValidateIssuerSigningKey { get; set; } = true;
         /// <summary>
         ///  是否驗證有效期間
         /// </summary>

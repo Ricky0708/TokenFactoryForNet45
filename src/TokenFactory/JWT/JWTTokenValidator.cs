@@ -16,7 +16,7 @@ namespace TokenFactory.JWT
         {
             _parameters = new JWTTokenValidateOption()
             {
-                 IssuerSigningKey = secret
+                IssuerSigningKey = secret
             };
         }
         public JWTTokenValidator(JWTTokenValidateOption parameters)
@@ -51,7 +51,7 @@ namespace TokenFactory.JWT
                 errorMsg = ex.Message;
                 principal = null;
             }
-            catch(SecurityTokenExpiredException ex)
+            catch (SecurityTokenExpiredException ex)
             {
                 isValidate = false;
                 errorMsg = ex.Message;
@@ -79,6 +79,7 @@ namespace TokenFactory.JWT
         /// <returns>true return principal, false return message</returns>
         public ValidationResult ValidateTokenAndGetPrincipal(string token)
         {
+
             var paras = new TokenValidationParameters()
             {
                 ClockSkew = _parameters.ClockSkew,
@@ -86,10 +87,10 @@ namespace TokenFactory.JWT
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_parameters.IssuerSigningKey)),
                 ValidateAudience = _parameters.ValidateAudience,
                 ValidateIssuer = _parameters.ValidateIssuer,
-                ValidateIssuerSigningKey = _parameters.ValidateIssuerSigningKey,
                 ValidateLifetime = _parameters.ValidateLifetime,
                 ValidIssuer = _parameters.ValidIssuer,
                 ValidAudience = _parameters.ValidAudience,
+                //ValidateIssuerSigningKey = _parameters.ValidateIssuerSigningKey,
             };
             var result = func(token, paras);
             return result;

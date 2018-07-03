@@ -13,6 +13,7 @@ namespace ConsoleTest
     {
         static void Main(string[] args)
         {
+            // ----------製作 Token----------
             ITokenGenerator manager = new JWTTokenGenerator(new JWTTokenGenerateOption()
             {
                 Audience = "Test",
@@ -26,23 +27,29 @@ namespace ConsoleTest
                       new Claim("Age", "25"),
                       new Claim("Birthday", "100/01/01"),
                   });
-            Console.WriteLine(token);
 
-
+            // ----------驗證及取出資料----------
             ITokenValidator validator = new JWTTokenValidator(new JWTTokenValidateOption()
             {
-                ValidAudience = "Test1",
-                ValidIssuer = "Test2",
-                ValidateAudience = true,
+                ValidIssuer = "Test", // if ValidateIssuer = true
+                ValidAudience = "Test", // if ValidateAudience = true
+                ValidateAudience = false,
                 ValidateIssuer = false,
                 IssuerSigningKey = "IIIIIIIIIIIIIIIIIIIIIIIIIIII",
             });
-            System.Threading.Thread.Sleep(6000);
             var result = validator.ValidateTokenAndGetPrincipal(token);
-            Console.WriteLine("Name:" + result.Principal.FindFirst("Name").Value);
-            Console.WriteLine("Age:" + result.Principal.FindFirst("Age").Value);
-            Console.WriteLine("Birthday:" + result.Principal.FindFirst("Birthday").Value);
-            Console.WriteLine(token.Length);
+
+            if (result.IsValid)
+            {
+                Console.WriteLine("Name:" + result.Principal.FindFirst("Name").Value);
+                Console.WriteLine("Age:" + result.Principal.FindFirst("Age").Value);
+                Console.WriteLine("Birthday:" + result.Principal.FindFirst("Birthday").Value);
+            }
+            else
+            {
+                Console.WriteLine(result.ErrorMsg);
+            }
+
             Console.ReadLine();
         }
     }
