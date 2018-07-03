@@ -21,7 +21,11 @@ namespace TokenFactory.JWT
         }
         public JWTTokenGenerator(JWTTokenGenerateOption options)
         {
-            _options = options ?? throw new ArgumentException("options can't be null");
+            if (options == null || String.IsNullOrEmpty(options.Secret))
+            {
+                throw new ArgumentException("options or secret can't be null");
+            }
+            _options = options;
         }
         /// <summary>
         /// Create JWT token

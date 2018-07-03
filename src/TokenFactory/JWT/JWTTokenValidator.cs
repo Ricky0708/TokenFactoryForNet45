@@ -21,7 +21,11 @@ namespace TokenFactory.JWT
         }
         public JWTTokenValidator(JWTTokenValidateOption parameters)
         {
-            _parameters = _parameters ?? throw new ArgumentException("parameters can't be null");
+            if (_parameters == null || String.IsNullOrEmpty(_parameters.IssuerSigningKey))
+            {
+                throw new ArgumentException("options or secret can't be null");
+            }
+            _parameters = parameters;
         }
         private Func<string, TokenValidationParameters, ValidationResult> func = (funcToken, funcParameters) =>
         {
