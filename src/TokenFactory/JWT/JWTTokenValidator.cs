@@ -21,7 +21,7 @@ namespace TokenFactory.JWT
         }
         public JWTTokenValidator(JWTTokenValidateOption parameters)
         {
-            if (_parameters == null || String.IsNullOrEmpty(_parameters.IssuerSigningKey))
+            if (parameters == null || String.IsNullOrEmpty(parameters.IssuerSigningKey))
             {
                 throw new ArgumentException("options or secret can't be null");
             }
