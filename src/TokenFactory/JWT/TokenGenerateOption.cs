@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TokenFactory.JWT
 {
-    public class JWTTokenGenerateOption
+    public class TokenGenerateOption
     {
 
         /// <summary>

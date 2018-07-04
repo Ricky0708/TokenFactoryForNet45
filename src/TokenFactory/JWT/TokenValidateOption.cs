@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TokenFactory.JWT
 {
-    public class JWTTokenValidateOption
+    public class TokenValidateOption
     {
         /// <summary>
         /// 允許時間位移

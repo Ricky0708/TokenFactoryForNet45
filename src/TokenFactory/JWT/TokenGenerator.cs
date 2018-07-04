@@ -9,22 +9,22 @@ using System.Threading.Tasks;
 
 namespace TokenFactory.JWT
 {
-    public class JWTTokenGenerator : ITokenGenerator
+    public class TokenGenerator : ITokenGenerator
     {
-        private JWTTokenGenerateOption _options;
-        public JWTTokenGenerator(string secret)
+        private TokenGenerateOption _options;
+        public TokenGenerator(string secret)
         {
-            _options = new JWTTokenGenerateOption()
+            _options = new TokenGenerateOption()
             {
                 Secret = secret
             };
+            var errors = Utilities.CheckJWTOption(_options);
+            if (!String.IsNullOrEmpty(errors)) throw new ArgumentException(errors);
         }
-        public JWTTokenGenerator(JWTTokenGenerateOption options)
+        public TokenGenerator(TokenGenerateOption options)
         {
-            if (options == null || String.IsNullOrEmpty(options.Secret))
-            {
-                throw new ArgumentException("options or secret can't be null");
-            }
+            var errors = Utilities.CheckJWTOption(options);
+            if (!String.IsNullOrEmpty(errors)) throw new ArgumentException(errors);
             _options = options;
         }
         /// <summary>
@@ -37,7 +37,7 @@ namespace TokenFactory.JWT
             //assign default options
             if (_options == null)
             {
-                _options = new JWTTokenGenerateOption();
+                _options = new TokenGenerateOption();
             }
             _options.Subject = claims;
 
@@ -53,13 +53,13 @@ namespace TokenFactory.JWT
         }
 
 
-        private SecurityTokenDescriptor MakeTokenDescriptor(JWTTokenGenerateOption options)
+        private SecurityTokenDescriptor MakeTokenDescriptor(TokenGenerateOption options)
         {
             var result = func(options);
             return result;
         }
 
-        private Func<JWTTokenGenerateOption, SecurityTokenDescriptor> func = (funOption) =>
+        private Func<TokenGenerateOption, SecurityTokenDescriptor> func = (funOption) =>
         {
             //convert signture to base64
             var symmetricKey = Encoding.UTF8.GetBytes(funOption.Secret);

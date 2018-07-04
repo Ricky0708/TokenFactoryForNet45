@@ -14,11 +14,11 @@ namespace ConsoleTest
         static void Main(string[] args)
         {
             // ----------製作 Token----------
-            ITokenGenerator manager = new JWTTokenGenerator(new JWTTokenGenerateOption()
+            ITokenGenerator manager = new TokenGenerator(new TokenGenerateOption()
             {
                 Audience = "Test",
                 Issuer = "Test",
-                Secret = "IIIIIIIIIIIIIIIIIIIIIIIIIIII",
+                Secret = "XuennXuennXuenn1",
                 ExpireSeconds = 50
             });
             var token = manager.GenerateToken(new List<Claim>()
@@ -29,15 +29,15 @@ namespace ConsoleTest
                   });
 
             // ----------驗證及取出資料----------
-            ITokenValidator validator = new JWTTokenValidator(new JWTTokenValidateOption()
+            ITokenValidator validator = new TokenValidator(new TokenValidateOption()
             {
                 ValidIssuer = "Test", // if ValidateIssuer = true
                 ValidAudience = "Test", // if ValidateAudience = true
                 ValidateAudience = false,
                 ValidateIssuer = false,
-                IssuerSigningKey = "IIIIIIIIIIIIIIIIIIIIIIIIIIII",
+                IssuerSigningKey = "XuennXuennXuenn1",
             });
-            var result = validator.ValidateTokenAndGetPrincipal(token);
+            var result = validator.Validate(token);
 
             if (result.IsValid)
             {

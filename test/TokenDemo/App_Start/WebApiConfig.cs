@@ -20,7 +20,7 @@ namespace TokenDemo
             // Web API configuration and services
             Func<HttpRequest, string> tokenFromHeader = request => request.Headers.GetValues("Authorization")?.FirstOrDefault()?.Substring("Bearer ".Length);
             Func<HttpRequest, string> tokenFromQueryString = request => request.QueryString.GetValues("Bearer")?.FirstOrDefault();
-            var tokenValidator = new JWTTokenValidator(new JWTTokenValidateOption()
+            var tokenValidator = new TokenValidator(new TokenValidateOption()
             {
                 ValidIssuer = "RickyServer",
                 ValidAudience = "RickyClient",

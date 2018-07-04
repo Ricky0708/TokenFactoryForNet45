@@ -20,7 +20,7 @@ namespace TokenDemo.Services
         public TokenServce()
         {
             // 設定制作token的參數, INTG 應該不用
-            _generator = new JWTTokenGenerator(new JWTTokenGenerateOption()
+            _generator = new TokenGenerator(new TokenGenerateOption()
             {
                 Audience = "RickyClient",
                 Issuer = "RickyServer",

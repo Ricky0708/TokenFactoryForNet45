@@ -9,24 +9,27 @@ using System.Threading.Tasks;
 
 namespace TokenFactory.JWT
 {
-    public class JWTTokenValidator : ITokenValidator
+    public class TokenValidator : ITokenValidator
     {
-        private JWTTokenValidateOption _parameters;
-        public JWTTokenValidator(string secret)
+        private TokenValidateOption _parameters;
+        public TokenValidator(string secret)
         {
-            _parameters = new JWTTokenValidateOption()
+            _parameters = new TokenValidateOption()
             {
                 IssuerSigningKey = secret
             };
+            var errors = Utilities.CheckJWTOption(_parameters);
+            if (!String.IsNullOrEmpty(errors)) throw new ArgumentException(errors);
         }
-        public JWTTokenValidator(JWTTokenValidateOption parameters)
+        public TokenValidator(TokenValidateOption parameters)
         {
-            if (parameters == null || String.IsNullOrEmpty(parameters.IssuerSigningKey))
-            {
-                throw new ArgumentException("options or secret can't be null");
-            }
+            var errors = Utilities.CheckJWTOption(parameters);
+            if (!String.IsNullOrEmpty(errors)) throw new ArgumentException(errors);
             _parameters = parameters;
         }
+
+
+
         private Func<string, TokenValidationParameters, ValidationResult> func = (funcToken, funcParameters) =>
         {
             bool isValidate = false;
@@ -77,7 +80,7 @@ namespace TokenFactory.JWT
         /// <param name="token"></param>
         /// <param name="parameters"></param>
         /// <returns>true return principal, false return message</returns>
-        public ValidationResult ValidateTokenAndGetPrincipal(string token)
+        public ValidationResult Validate(string token)
         {
 
             var paras = new TokenValidationParameters()

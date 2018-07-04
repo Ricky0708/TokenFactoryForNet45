@@ -18,6 +18,6 @@ namespace TokenFactory
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        ValidationResult ValidateTokenAndGetPrincipal(string token);
+        ValidationResult Validate(string token);
     }
 }

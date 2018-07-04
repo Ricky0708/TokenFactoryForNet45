@@ -32,7 +32,7 @@ namespace TokenFactory
             var token = _provideTokenDelegate(HttpContext.Current.Request);
             if (!string.IsNullOrEmpty(token))
             {
-                var result = _validator.ValidateTokenAndGetPrincipal(token);
+                var result = _validator.Validate(token);
                 if (result.IsValid)
                 {
                     HttpContext.Current.User = result.Principal;
