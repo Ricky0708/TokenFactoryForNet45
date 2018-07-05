@@ -21,7 +21,7 @@ namespace TokenDemo.Attributes
             {
                 return;
             }
-
+            
             if (!HttpContext.Current.User.Identity.IsAuthenticated)
             {
                 actionContext.Response = new HttpResponseMessage(HttpStatusCode.OK);

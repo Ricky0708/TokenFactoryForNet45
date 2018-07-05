@@ -24,6 +24,7 @@ namespace TokenDemo.Controllers
             _signinService = new TokenServce();
             _accountManager = new AccountManager();
         }
+        [AllowAnonymous]
         public IHttpActionResult POST()
         {
             var claims = _accountService.GetClaimsByUser("Ricky");

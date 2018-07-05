@@ -24,11 +24,11 @@ namespace TokenFactory.JWT
         /// <summary>
         /// 是否驗證發行對像 (client target)
         /// </summary>
-        public bool ValidateAudience { get; set; } = true;
+        public bool ValidateAudience { get; set; } = false;
         /// <summary>
         /// 是否驗證發行者 (server)
         /// </summary>
-        public bool ValidateIssuer { get; set; } = true;
+        public bool ValidateIssuer { get; set; } = false;
         ///// <summary>
         ///// 是否驗證 key
         ///// </summary>
