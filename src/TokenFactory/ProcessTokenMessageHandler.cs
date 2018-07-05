@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using TokenFactory.Models;
 
 namespace TokenFactory
 {
-    public delegate string ProvideTokenDelegating(HttpRequest request);
+    public delegate TokenInfo ProvideTokenDelegating(HttpRequest request);
 
     public class ProcessTokenMessageHandler : DelegatingHandler
     {
@@ -22,26 +23,31 @@ namespace TokenFactory
             _provideTokenDelegate = provideDelegate;
             _errorProcess = errorProcess;
         }
-        public ProcessTokenMessageHandler(ITokenValidator validator, Func<HttpRequest, string> provideTokenFunc)
+        public ProcessTokenMessageHandler(ITokenValidator validator, Func<HttpRequest, TokenInfo> provideTokenFunc)
         {
             _validator = validator;
             _provideTokenDelegate = new ProvideTokenDelegating(p => provideTokenFunc(p));
         }
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var token = _provideTokenDelegate(HttpContext.Current.Request);
-            if (!string.IsNullOrEmpty(token))
+            var tokenInfo = _provideTokenDelegate(HttpContext.Current.Request);
+            if (!string.IsNullOrEmpty(tokenInfo.Token))
             {
-                var result = _validator.Validate(token);
+                var result = _validator.Validate(tokenInfo.Token);
                 if (result.IsValid)
                 {
                     HttpContext.Current.User = result.Principal;
-                    HttpContext.Current.Items["CustomToken"] = token;
+                    HttpContext.Current.Items["CustomToken"] = tokenInfo.Token;
+
                 }
                 else
                 {
                     _errorProcess?.Invoke(result.ErrorMsg);
                 }
+            }
+            foreach (var item in tokenInfo?.ExteneralInfo ?? new Dictionary<string, string>())
+            {
+                HttpContext.Current.Items[item.Key] = item.Value;
             }
             return base.SendAsync(request, cancellationToken);
         }

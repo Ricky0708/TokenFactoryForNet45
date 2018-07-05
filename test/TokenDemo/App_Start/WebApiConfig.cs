@@ -10,6 +10,7 @@ using TokenDemo.Attributes;
 using TokenDemo.Services;
 using TokenFactory;
 using TokenFactory.JWT;
+using TokenFactory.Models;
 
 namespace TokenDemo
 {
@@ -18,8 +19,8 @@ namespace TokenDemo
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            Func<HttpRequest, string> tokenFromHeader = request => request.Headers.GetValues("Authorization")?.FirstOrDefault()?.Substring("Bearer ".Length);
-            Func<HttpRequest, string> tokenFromQueryString = request => request.QueryString.GetValues("Bearer")?.FirstOrDefault();
+            Func<HttpRequest, TokenInfo> tokenFromHeader = request => new TokenInfo() { Token = request.Headers.GetValues("Authorization")?.FirstOrDefault()?.Substring("Bearer ".Length) };
+            Func<HttpRequest, TokenInfo> tokenFromQueryString = request => new TokenInfo() { Token = request.QueryString.GetValues("Bearer")?.FirstOrDefault() };
             var tokenValidator = new TokenValidator(new TokenValidateOption()
             {
                 ValidIssuer = "RickyServer",
