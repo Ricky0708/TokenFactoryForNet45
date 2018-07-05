@@ -36,6 +36,7 @@ namespace TokenFactory
                 if (result.IsValid)
                 {
                     HttpContext.Current.User = result.Principal;
+                    HttpContext.Current.Items["CustomToken"] = token;
                 }
                 else
                 {

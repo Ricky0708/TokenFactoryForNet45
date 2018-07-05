@@ -16,16 +16,18 @@ namespace ConsoleTest
             // ----------製作 Token----------
             ITokenGenerator manager = new TokenGenerator(new TokenGenerateOption()
             {
-                Audience = "Test",
-                Issuer = "Test",
-                Secret = "XuennXuennXuenn1",
-                ExpireSeconds = 50
+                Audience = "RickyClient",
+                Issuer = "RickyServer",
+                Secret = "AAAAAAAAAAAAAAAAAAAAA",
+                ExpireSeconds = 500000000
             });
             var token = manager.GenerateToken(new List<Claim>()
                   {
-                      new Claim("Name", "Ricky"),
-                      new Claim("Age", "25"),
-                      new Claim("Birthday", "100/01/01"),
+                      new Claim("UserCode", "Ricky"),
+                      new Claim("CurrencyCode", "TWD"),
+                      new Claim("CountryCode", "TW"),
+                      new Claim("Gender", "M"),
+                      new Claim("Birthdate", "100/01/01"),
                   });
 
             // ----------驗證及取出資料----------
