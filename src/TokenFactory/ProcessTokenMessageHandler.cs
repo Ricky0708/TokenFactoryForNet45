@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,22 +12,19 @@ using TokenFactory.Models;
 namespace TokenFactory
 {
     public delegate TokenInfo ProvideTokenDelegating(HttpRequest request);
-
+    public delegate void ProvideTokenInfoCallBackDelegating(ValidationResult result, TokenInfo tokenInfo);
     public class ProcessTokenMessageHandler : DelegatingHandler
     {
         private readonly ITokenValidator _validator;
         private readonly ProvideTokenDelegating _provideTokenDelegate;
+        private readonly ProvideTokenInfoCallBackDelegating _provideTokenInfoCallBackDelegate;
         private readonly Action<string> _errorProcess;
-        public ProcessTokenMessageHandler(ITokenValidator validator, ProvideTokenDelegating provideDelegate, Action<string> errorProcess = null)
-        {
-            _validator = validator;
-            _provideTokenDelegate = provideDelegate;
-            _errorProcess = errorProcess;
-        }
-        public ProcessTokenMessageHandler(ITokenValidator validator, Func<HttpRequest, TokenInfo> provideTokenFunc)
+   
+        public ProcessTokenMessageHandler(ITokenValidator validator, Func<HttpRequest, TokenInfo> provideTokenFunc, Action<ValidationResult, TokenInfo> provideTokenInfoAct)
         {
             _validator = validator;
             _provideTokenDelegate = new ProvideTokenDelegating(p => provideTokenFunc(p));
+            _provideTokenInfoCallBackDelegate = new ProvideTokenInfoCallBackDelegating((p, t) => provideTokenInfoAct(p, t));
         }
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
@@ -34,21 +32,12 @@ namespace TokenFactory
             if (!string.IsNullOrEmpty(tokenInfo.Token))
             {
                 var result = _validator.Validate(tokenInfo.Token);
-                if (result.IsValid)
-                {
-                    HttpContext.Current.User = result.Principal;
-                    HttpContext.Current.Items["CustomToken"] = tokenInfo.Token;
-
-                }
-                else
-                {
-                    _errorProcess?.Invoke(result.ErrorMsg);
-                }
+                _provideTokenInfoCallBackDelegate(result, tokenInfo);
             }
-            foreach (var item in tokenInfo?.ExteneralInfo ?? new Dictionary<string, string>())
-            {
-                HttpContext.Current.Items[item.Key] = item.Value;
-            }
+            //foreach (var item in tokenInfo?.ExteneralInfo ?? new Dictionary<string, string>())
+            //{
+            //    HttpContext.Current.Items[item.Key] = item.Value;
+            //}
             return base.SendAsync(request, cancellationToken);
         }
     }

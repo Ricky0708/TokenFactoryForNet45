@@ -27,8 +27,40 @@ namespace TokenDemo
                 ValidAudience = "RickyClient",
                 IssuerSigningKey = "AAAAAAAAAAAAAAAAAAAAA"
             });
-            config.MessageHandlers.Add(new ProcessTokenMessageHandler(tokenValidator, tokenFromHeader));
-            config.MessageHandlers.Add(new ProcessTokenMessageHandler(tokenValidator, tokenFromQueryString));
+            config.MessageHandlers.Add(new ProcessTokenMessageHandler(tokenValidator, tokenFromHeader, (v, t) =>
+            {
+                if (v.IsValid)
+                {
+                    HttpContext.Current.User = v.Principal;
+                }
+                else
+                {
+                    var message = v.ErrorMsg;
+                    // TODO LOG message
+                }
+                foreach (var item in t?.ExteneralInfo ?? new Dictionary<string, string>())
+                {
+                    HttpContext.Current.Items[item.Key] = item.Value;
+                }
+
+            }));
+            config.MessageHandlers.Add(new ProcessTokenMessageHandler(tokenValidator, tokenFromQueryString, (v, t) =>
+            {
+                if (v.IsValid)
+                {
+                    HttpContext.Current.User = v.Principal;
+                    HttpContext.Current.Items["CustomToken"] = t.Token;
+                }
+                else
+                {
+                    var message = v.ErrorMsg;
+                    // TODO LOG message
+                }
+                foreach (var item in t?.ExteneralInfo ?? new Dictionary<string, string>())
+                {
+                    HttpContext.Current.Items[item.Key] = item.Value;
+                }
+            }));
 
             config.Filters.Add(new MyAuthorize());
             // Web API routes
