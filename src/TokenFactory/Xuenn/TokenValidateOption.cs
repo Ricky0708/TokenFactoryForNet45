@@ -8,6 +8,7 @@ namespace TokenFactory.Xuenn
 {
     public class TokenValidateOption
     {
+        public bool validateOTT { get; set; }
         public string CommonCSNTokenKey { get; set; }
         public string CommonCSNTokenIV { get; set; }
     }
