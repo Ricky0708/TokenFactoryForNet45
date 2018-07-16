@@ -18,13 +18,20 @@ namespace TokenFactory.Xuenn
         }
         public ValidationResult Validate(string token)
         {
-            var userCode = TokenHelper.GetUserCodeFromToken(token, _option.CommonCSNTokenKey, _option.CommonCSNTokenIV);
-            var partnerId = TokenHelper.GetPartnerId(token, _option.CommonCSNTokenKey, _option.CommonCSNTokenIV);
-            var platformId = TokenHelper.GetPlatformIdFromToken(token, _option.CommonCSNTokenKey, _option.CommonCSNTokenIV);
+            if (TokenHelper.ValidateToken(token, _option.CommonCSNTokenKey, _option.CommonCSNTokenIV))
+            {
+                return new ValidationResult()
+                {
+                    ErrorMsg = "Invalid token",
+                    IsValid = false,
+                };
+            }
+            var array = TokenHelper.GetTokenArray(token, _option.CommonCSNTokenKey, _option.CommonCSNTokenIV);
             var claimsIdentity = new ClaimsIdentity();
-            claimsIdentity.AddClaim(new Claim("UserCode", userCode));
-            claimsIdentity.AddClaim(new Claim("PartnerId", partnerId));
-            claimsIdentity.AddClaim(new Claim("PlatformId", platformId));
+            for (int i = 0; i < array.Length; i++)
+            {
+                claimsIdentity.AddClaim(new Claim(i.ToString(), array[i]));
+            }
             var result = new ValidationResult()
             {
                 IsValid = true,
