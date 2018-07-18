@@ -40,5 +40,9 @@ namespace TokenFactory.JWT
         /// 在此時間前無效
         /// </summary>
         public DateTime? NotBefore { get; set; }
+        /// <summary>
+        /// 每次發佈更新發行日期
+        /// </summary>
+        public bool AlwaysResetIssuedDate { get; set; }
     }
 }

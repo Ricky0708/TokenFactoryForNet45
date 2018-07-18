@@ -70,7 +70,7 @@ namespace TokenFactory.JWT
             {
                 claims.AddClaims(funOption.Subject);
             }
-            if (!funOption.IssuedAt.HasValue)
+            if (funOption.AlwaysResetIssuedDate || !funOption.IssuedAt.HasValue)
             {
                 funOption.IssuedAt = DateTime.UtcNow;
             }
