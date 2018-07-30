@@ -18,7 +18,7 @@ namespace TokenFactory.Xuenn
         }
         public ValidationResult Validate(string token)
         {
-            if (!TokenHelper.Validate188Tokens(_option.validateOTT, token, _option.CommonCSNTokenKey, _option.CommonCSNTokenIV))
+            if (_option.IsValidExpired && !TokenHelper.Validate188Tokens(_option.validateOTT, token, _option.CommonCSNTokenKey, _option.CommonCSNTokenIV))
             {
                 return new ValidationResult()
                 {
