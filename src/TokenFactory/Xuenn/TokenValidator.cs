@@ -27,6 +27,7 @@ namespace TokenFactory.Xuenn
                 };
             }
             var array = TokenHelper.GetTokenArray(token, _option.CommonCSNTokenKey, _option.CommonCSNTokenIV);
+
             var claimsIdentity = new ClaimsIdentity();
             for (int i = 0; i < array.Length; i++)
             {
